@@ -27,8 +27,8 @@ public class BlogService {
         
         // Convert List<Blog> to List<BlogDto>
         return blogs.stream().map(blog -> {
-            // Create a mock author for now
-            UserDto author = new UserDto(1L, blog.getAuthor() != null ? blog.getAuthor() : "Anonymous", "user@example.com");
+            String authorName = blog.getAuthor() != null ? blog.getAuthor() : "Anonymous";
+            UserDto author = new UserDto(null, authorName, "user@example.com");
             
             return new BlogDto(
                 blog.getId(),
@@ -57,12 +57,12 @@ public class BlogService {
     }
     
     // Get blog by ID
-    public BlogDto getBlogById(Long id) {
+    public BlogDto getBlogById(String id) {
         Blog blog = blogRepository.findById(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Blog not found"));
         
-        // Create a mock author
-        UserDto author = new UserDto(1L, blog.getAuthor() != null ? blog.getAuthor() : "Anonymous", "user@example.com");
+        String authorName = blog.getAuthor() != null ? blog.getAuthor() : "Anonymous";
+        UserDto author = new UserDto(null, authorName, "user@example.com");
         
         return new BlogDto(
             blog.getId(),

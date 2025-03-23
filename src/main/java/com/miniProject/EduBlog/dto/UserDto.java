@@ -1,24 +1,24 @@
 package com.miniProject.EduBlog.dto;
 
 public class UserDto {
-    private Long id;
+    private String id;
     private String username;
     private String email;
     
     public UserDto() {
     }
     
-    public UserDto(Long id, String username, String email) {
+    public UserDto(String id, String username, String email) {
         this.id = id;
         this.username = username;
         this.email = email;
     }
     
-    public Long getId() {
+    public String getId() {
         return id;
     }
     
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
     

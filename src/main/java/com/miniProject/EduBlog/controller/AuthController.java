@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import com.miniProject.EduBlog.dto.AuthRequest;
 import com.miniProject.EduBlog.dto.AuthResponse;
 import com.miniProject.EduBlog.security.JwtUtil;
 import com.miniProject.EduBlog.service.AuthService;
+import com.miniProject.EduBlog.entity.User;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -35,13 +37,19 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody AuthRequest request) {
         try {
-            authService.registerUser(request);
+            var user = authService.registerUser(request);
             
             // Generate token for the newly registered user
             UserDetails userDetails = authService.loadUserByUsername(request.getUsername().trim());
             String token = jwtUtil.generateToken(userDetails);
             
-            return ResponseEntity.ok(new AuthResponse(token));
+            var response = new java.util.HashMap<String, Object>();
+            response.put("token", token);
+            response.put("username", user.getUsername());
+            response.put("email", user.getEmail());
+            response.put("id", user.getId());
+            
+            return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -76,11 +84,18 @@ public class AuthController {
                 )
             );
 
-            // Generate token
+            // Generate token and get user details
             UserDetails userDetails = authService.loadUserByUsername(request.getUsername().trim());
             String token = jwtUtil.generateToken(userDetails);
+            var user = (com.miniProject.EduBlog.entity.User) userDetails;
 
-            return ResponseEntity.ok(new AuthResponse(token));
+            var response = new java.util.HashMap<String, Object>();
+            response.put("token", token);
+            response.put("username", user.getUsername());
+            response.put("email", user.getEmail());
+            response.put("id", user.getId());
+
+            return ResponseEntity.ok(response);
         } catch (BadCredentialsException e) {
             return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
@@ -90,5 +105,19 @@ public class AuthController {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new AuthResponse("Error during login: " + e.getMessage()));
         }
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<?> validateToken(@AuthenticationPrincipal User user) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        var response = new java.util.HashMap<String, Object>();
+        response.put("username", user.getUsername());
+        response.put("email", user.getEmail());
+        response.put("id", user.getId());
+
+        return ResponseEntity.ok(response);
     }
 }

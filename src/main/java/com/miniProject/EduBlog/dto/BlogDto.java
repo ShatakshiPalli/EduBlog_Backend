@@ -3,7 +3,7 @@ package com.miniProject.EduBlog.dto;
 import java.time.LocalDateTime;
 
 public class BlogDto {
-    private Long id;
+    private String id;
     private String title;
     private String category;
     private String description;
@@ -16,7 +16,7 @@ public class BlogDto {
     }
 
     // ✅ Parameterized constructor
-    public BlogDto(Long id, String title, String category, String description) {
+    public BlogDto(String id, String title, String category, String description) {
         this.id = id;
         this.title = title;
         this.category = category;
@@ -25,7 +25,7 @@ public class BlogDto {
     }
     
     // Constructor with all fields
-    public BlogDto(Long id, String title, String category, String description, String content, LocalDateTime createdAt, UserDto author) {
+    public BlogDto(String id, String title, String category, String description, String content, LocalDateTime createdAt, UserDto author) {
         this.id = id;
         this.title = title;
         this.category = category;
@@ -36,11 +36,11 @@ public class BlogDto {
     }
 
     // ✅ Getters and Setters
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

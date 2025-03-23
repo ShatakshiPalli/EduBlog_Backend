@@ -1,33 +1,28 @@
 package com.miniProject.EduBlog.entity;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name = "blogs")
+@Document(collection = "blogs")
 public class Blog {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     
-    @Column(nullable = false)
     private String title;
     
-    @Column(nullable = false)
     private String category;
     
-    @Column(nullable = false, length = 500)
     private String description;
     
-    @Column(nullable = false)
     private String author;
 
     // Getters and Setters
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

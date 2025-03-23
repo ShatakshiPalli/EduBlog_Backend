@@ -3,35 +3,26 @@ package com.miniProject.EduBlog.entity;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "users")  // Ensure correct table name
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Document(collection = "users")
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(unique = true, nullable = false)
+    @Indexed(unique = true)
     private String username;
 
-    @Column(unique = true, nullable = false)
+    @Indexed(unique = true)
     private String email;
 
-    @Column(nullable = false)
     @JsonIgnore
     private String password;
 
@@ -80,11 +71,11 @@ public class User implements UserDetails {
     }
 
     // Getters and Setters
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

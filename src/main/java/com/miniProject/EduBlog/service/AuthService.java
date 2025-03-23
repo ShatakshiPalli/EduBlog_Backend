@@ -1,4 +1,3 @@
-
 package com.miniProject.EduBlog.service;
 
 import org.springframework.context.annotation.Primary;
@@ -26,7 +25,7 @@ public class AuthService implements UserDetailsService {
     }
 
     @Transactional
-    public void registerUser(AuthRequest request) {
+    public User registerUser(AuthRequest request) {
         // Validate required fields
         if (request.getUsername() == null || request.getUsername().trim().isEmpty()) {
             throw new IllegalArgumentException("Username is required");
@@ -54,7 +53,7 @@ public class AuthService implements UserDetailsService {
         user.setEmail(request.getEmail().trim().toLowerCase());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Override
